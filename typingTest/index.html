@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing master</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>  
+<div class="maindiv">
+    <div class="centerdiv">
+        <h1>Test your typing speed</h1>
+        <h2 id ="typeText"> </h2>
+        <br>
+        <textarea name="" id="text-area" cols="80" rows="10"></textarea>
+        <br>
+        <button class="mainbtn" id="btn">Start</button>
+    </div>
+</div>
+
+
+<script>
+    const setofWord = ["It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.", 
+    "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC",
+    "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
+    "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy."];
+
+    const msg       = document.getElementById('typeText');
+    const textArea  = document.getElementById('text-area');
+    const button    = document.getElementById('btn');
+    let startTime , endTime;
+
+const playGame = () => {
+    let randomNumber = Math.floor(Math.random()*setofWord.length);
+    msg.innerText = setofWord[randomNumber];
+    let date = new Date();
+    startTime = date.getTime();
+    button.innerText = "Done";
+}
+
+const endGame = () => {
+    let date = new Date();
+    endTime = date.getTime();
+    let totalTime = ((endTime - startTime)/ 1000);
+
+    let totalStr = textArea.value;
+    let wordCount = wordCounter(totalStr);
+
+    let speed = Math.round((wordCount/totalTime)* 60);
+
+    let finalMsg = "You typed total at " +speed+ " words per minutes ";
+
+    finalMsg += compareWord(msg.innerText, totalStr);
+
+    msg.innerText = finalMsg;
+
+}
+
+const compareWord = (str1 , str2) => {
+    let words1 = str1.split(" ");
+    let words2 = str2.split(" ");
+    let cnt = 0;
+
+    words1.forEach(function(item, index){
+        if(item == words2[index]){
+            cnt++;
+        }
+    })
+    let errorwords = (words1.length - cnt);
+    return (cnt + " connect out of " + words1.length + " words ans the total numbner of error are " + errorwords + ".");
+}
+
+const wordCounter = (str) => {    //  (str )rendom parameter for split
+    let response = str.split(" ").length;
+    return response;
+}
+
+
+    button.addEventListener('click', function(){
+        if(this.innerText == "Start"){
+            textArea.disabled = false;
+            playGame();
+        }else if(this.innerText == "Done"){
+            textArea.disabled = true;
+            button.innerText = "Start";
+            endGame();
+        }
+    })
+
+</script>
+
+</body>
+</html>
+
+<!-- Dynamic typing test
+
+1: When user pressed start button then only active the textarea else disable it and vice-versa.
+2: Every time a new set of lines of top. Whenever a start button is pressed. Not the Done one.
+3: get the time and change the button text to Done.
+4: get the end time when user clicked on Done button. find the total time taken.
+5: find the total words on the setofWords.
+6: find the speed of the user and show it on top when user clicked on done.
+7: the call the compareWords fun and find how many of the wors are matching and how many not. Display the result on top with speed.  -->
